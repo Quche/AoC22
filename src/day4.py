@@ -12,7 +12,7 @@ with open('inputs/day4/day4.txt') as f:
         l2 = int(pair[1][0])
         r1 = int(pair[0][1])
         r2 = int(pair[1][1])
-=
+
         if (l1 > r1):
             print(f'{pair}: l1 is {pair[0][0]}; r1 is {pair[0][1]}: {i}')
 
