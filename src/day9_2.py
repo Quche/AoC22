@@ -11,6 +11,9 @@ def adjacent(n1,n2):
     else:
         return False
 
+def sameRowColumn(n1,n2):
+    return (n1[0] == n2[0]) | (n1[1] == n2[1])
+
 with open('inputs/day9/test2.txt') as f:
 
     for idx, line in enumerate(f.readlines()):
@@ -23,25 +26,37 @@ with open('inputs/day9/test2.txt') as f:
             # head
             init_state = copy.deepcopy(nodes_tmp)
             if move[0] == 'R':
-                nodes_tmp[-1][0] += 1
+                nodes_tmp[0][0] += 1
             elif move[0] == 'U':
-                nodes_tmp[-1][1] += 1
+                nodes_tmp[0][1] += 1
             elif move[0] == 'L':
-                nodes_tmp[-1][0] -= 1
+                nodes_tmp[0][0] -= 1
             else:
-                nodes_tmp[-1][1] -= 1
+                nodes_tmp[0][1] -= 1
 
             # other nodes
-            for idx_node in range(rope_size-2,-1,-1):
-                if not adjacent(nodes_tmp[idx_node],nodes_tmp[idx_node+1]):
-                    nodes_tmp[idx_node] = init_state[idx_node+1]
+            for idx_node in range(1,rope_size):
+                head = nodes_tmp[idx_node-1]
+                tail = nodes_tmp[idx_node]
+                if not adjacent(tail,head):
+                    if sameRowColumn(tail,head):
+                        nodes_tmp[idx_node] = init_state[idx_node-1]
+                    else:
+                        if (head[0] > tail[0]):
+                            nodes_tmp[idx_node][0] += 1
+                        if (head[1] > tail[1]):
+                            nodes_tmp[idx_node][1] += 1
+                        if (head[0] < tail[0]):
+                            nodes_tmp[idx_node][0] -= 1
+                        if (head[1] < tail[1]):
+                            nodes_tmp[idx_node][1] -= 1
 
             nodes_xy.append(copy.deepcopy(nodes_tmp))
 
 unique_el = []
 for node in nodes_xy:
-    if node[0] not in unique_el:
-        unique_el.append(node[0])
+    if node[-1] not in unique_el:
+        unique_el.append(node[-1])
 
 print(f'Unique tail positions: {len(unique_el)}')
 
